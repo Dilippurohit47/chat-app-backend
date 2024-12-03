@@ -5,6 +5,7 @@ import AuthRoutes from "./routes/index.js";
 const app: Application = express();
 import { Server } from "socket.io";
 import { createServer } from "http";
+import { setupSocket } from "./socket.js";
 const PORT = process.env.PORT || 7000;
 
 const server = createServer(app);
@@ -15,6 +16,7 @@ const io = new Server(server, {
   },
 });
 
+setupSocket(io)
 export { io };
 
 app.use(cors());
