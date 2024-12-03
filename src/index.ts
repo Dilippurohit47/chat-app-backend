@@ -3,9 +3,20 @@ import "dotenv/config";
 import cors from "cors";
 import AuthRoutes from "./routes/index.js";
 const app: Application = express();
+import { Server } from "socket.io";
+import { createServer } from "http";
 const PORT = process.env.PORT || 7000;
 
-// * Middleware
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+export { io };
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -14,6 +25,6 @@ app.get("/", (req: Request, res: Response) => {
   return res.send("It's working 🙌");
 });
 
-app.use("/api",AuthRoutes)
+app.use("/api", AuthRoutes);
 
-app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+server.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
